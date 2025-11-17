@@ -31,6 +31,7 @@ export default function RootLayout({
                         {/* Sidebar and routes */}
                         <div>
                             <SideBar />
+                            {/* this is test */}
                         </div>
                     </div>
                     <div className="flex-1 pl-2">{children}</div>
