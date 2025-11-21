@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "./components/Layout/header";
 import SideBar from "./components/Layout/sidebar";
+import BaseLayout from "./components/Layout/baseLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,23 +20,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                {/* <Header /> */}
-                <div className="flex">
-                    <div className="w-1/6 h-screen pl-2 pr-2 bg-green-50">
-                        {/* Title */}
-                        <div className="p-2">
-                            <h4 className="text-4xl font-bold bg-linear-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent tracking-tight">
-                                Manage It
-                            </h4>
-                        </div>
-                        {/* Sidebar and routes */}
-                        <div>
-                            <SideBar />
-                            {/* this is test */}
-                        </div>
-                    </div>
-                    <div className="flex-1 pl-2">{children}</div>
-                </div>
+                <BaseLayout>{children}</BaseLayout>
             </body>
         </html>
     );

@@ -6,6 +6,7 @@ import {
     Cog6ToothIcon,
     UserGroupIcon,
 } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const routes: { name: string; path: string; icon?: any }[] = [
     {
@@ -33,14 +34,14 @@ const SideBar = () => {
             <ul className="space-y-2 mt-4 text-emerald-700">
                 {routes.map((route) => (
                     <li key={route.path}>
-                        <a
+                        <Link
                             href={route.path}
                             className="flex items-center gap-2 p-2 rounded font-medium hover:bg-emerald-100"
                         >
                             <span className="flex items-center gap-2">
                                 {route.icon} {route.name}
                             </span>
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </ul>

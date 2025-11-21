@@ -15,9 +15,21 @@ const UsersList = async () => {
 
     const users: User[] = await res.json();
 
+    const personalRes: any = await fetch("http://localhost:3001/users/", {
+        cache: "no-store",
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            return data;
+        });
+
+    console.log({ personalRes });
+    // const res2 = await personalRes.json();
+
     return (
         <div>
-            <UserListTable users={users} />
+            <UserListTable users={users} personalRes={personalRes} />
         </div>
     );
 };
