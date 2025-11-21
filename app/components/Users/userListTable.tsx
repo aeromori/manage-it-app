@@ -8,11 +8,13 @@ interface User {
 
 interface UsersListProps {
     users: User[];
+    personalRes: any;
 }
 
-const UserListTable = ({ users }: UsersListProps) => {
+const UserListTable = ({ users, personalRes }: UsersListProps) => {
     return (
         <div className="w-300">
+            {/* <p>{personalRes}</p> */}
             <p>{new Date().toLocaleTimeString()}</p>
             <table className="table-auto border-collapse w-full">
                 <thead className="bg-gray-500 border-0">
@@ -22,8 +24,8 @@ const UserListTable = ({ users }: UsersListProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.length &&
-                        users.map((user, i) => (
+                    {personalRes.length &&
+                        personalRes.map((user, i) => (
                             <tr
                                 className={
                                     i % 2 === 0 ? "bg-gray-200" : "bg-gray-300"
