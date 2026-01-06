@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import {
     HomeIcon,
     Cog6ToothIcon,
     UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { Button } from "flowbite-react";
+import { useRouter } from "next/navigation";
 
 const routes: { name: string; path: string; icon?: any }[] = [
     {
@@ -28,6 +31,7 @@ const routes: { name: string; path: string; icon?: any }[] = [
 
 const SideBar = () => {
     const [activePage, setActivePage] = useState<string>("/");
+    const router = useRouter();
 
     return (
         <>
@@ -45,6 +49,23 @@ const SideBar = () => {
                     </li>
                 ))}
             </ul>
+
+            {/* <Link
+                href={"#"}
+                onClick={() => {
+                    Cookies.remove("user");
+                }}
+            >
+                Logout
+            </Link> */}
+            <Button
+                onClick={() => {
+                    Cookies.remove("user");
+                    router.push("/login");
+                }}
+            >
+                Logout
+            </Button>
         </>
     );
 };

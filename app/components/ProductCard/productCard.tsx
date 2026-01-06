@@ -18,7 +18,6 @@ const ProductCard = async () => {
         console.error("Error fetching data: ", e);
     }
 
-    console.log({ data });
     return (
         <div className="card p-5 my-5 bg-sky-400 text-white text-xl hover:bg-sky">
             <AddToCart />
