@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-import UsersList from "../components/Users/usersList";
-import Loading from "../components/Loading/loading";
+import UsersList from "../../components/Users/usersList";
+import Loading from "../../components/Loading/loading";
 
 const UsersPage = async () => {
     return (

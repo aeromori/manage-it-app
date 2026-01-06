@@ -4,7 +4,6 @@ import React, { Suspense, useState } from "react";
 const Header = () => {
     const [open, setOpen] = useState<boolean>(false);
 
-    console.log({ open });
     return (
         <>
             <div className="m-0 px-2 py-3 flex justify-between items-center bg-gray-300">
