@@ -1,9 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
-import ProductCard from "./components/ProductCard/productCard";
-import { Suspense } from "react";
-import Loading from "./components/Loading/loading";
-
 export default async function Home() {
     return (
         <main>

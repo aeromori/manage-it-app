@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface user {
     id: string;
     username: string;
+    isAdmin?: boolean;
     accessToken: string;
 }
 

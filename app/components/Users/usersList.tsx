@@ -7,9 +7,9 @@ interface User {
 
 const UsersList = () => {
     return (
-        <div>
+        <>
             <UserListTable />
-        </div>
+        </>
     );
 };
 

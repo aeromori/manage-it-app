@@ -33,7 +33,6 @@ const LoginForm = () => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-
         //  redux will handle the authentication including the loading and error states
         dispatch(loginAsync({ username, password }));
     };
@@ -46,8 +45,16 @@ const LoginForm = () => {
 
     useEffect(() => {
         if (user) {
-            Cookies.set("user", user.accessToken);
-            router.push("/users");
+            Cookies.set(
+                "user",
+                JSON.stringify({
+                    accessToken: user.accessToken,
+                    username: user.username,
+                    isAdmin: user.isAdmin,
+                }),
+                { expires: 1 }
+            );
+            router.push("/");
         }
     }, [user]);
 
@@ -108,7 +115,7 @@ const LoginForm = () => {
                         {/* Demo Credentials */}
                         {user && (
                             <div className="mt-6 p-4 bg-amber-50 rounded border border-amber-200">
-                                User Authenticated
+                                <Spinner /> Redirecting to dashboard...
                             </div>
                         )}
 

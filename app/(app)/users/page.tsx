@@ -5,10 +5,11 @@ import Loading from "../../components/Loading/loading";
 const UsersPage = async () => {
     return (
         <>
-            <h1>Users</h1>
-            <Suspense fallback={<Loading />}>
+            <div className="space-y-6">
+                {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"> */}
                 <UsersList />
-            </Suspense>
+                {/* </div> */}
+            </div>
         </>
     );
 };
