@@ -1,5 +1,6 @@
 import api from "@/app/api/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 interface user {
     _id: string;
@@ -83,8 +84,15 @@ export const fetchUsersAsync = createAsyncThunk<
     void,
     { rejectValue: string }
 >("users/fetchUsersAsync", async (_, { rejectWithValue }) => {
+    const user = await Cookies.get("user");
+    const token = JSON.parse(user || "{}").accessToken;
+
     try {
-        const response = await api.get(`${baseApiUrl}/users`);
+        const response = await api.get(`${baseApiUrl}/users`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
 
         return response.data;
     } catch (error) {
@@ -97,8 +105,15 @@ export const fetchUserDetailAsync = createAsyncThunk<
     { id: string },
     { rejectValue: string }
 >("users/fetchUserDetailAsync", async ({ id }, { rejectWithValue }) => {
+    const user = await Cookies.get("user");
+    const token = JSON.parse(user || "{}").accessToken;
+
     try {
-        const response = await api.get(`${baseApiUrl}/users/${id}`);
+        const response = await api.get(`${baseApiUrl}/users/${id}`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+        });
 
         return response.data;
     } catch (error) {
