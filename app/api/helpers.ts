@@ -6,6 +6,10 @@ import * as jose from "jose";
 const JWT_SECRET_KEY = process.env.JWT_SECRET;
 const jwtSecret = new TextEncoder().encode(JWT_SECRET_KEY);
 
+interface VerifyTokenOptions {
+    returnPayload?: boolean;
+}
+
 //  Waits for a given number of milliseconds
 export const wait = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -15,8 +19,8 @@ export const wait = (ms: number) =>
 
 //  wrapper for axios mock adapter that adds authentication checks
 export const withAuth =
-    (...data) =>
-    async (config) => {
+    (...data: ((arg0: any) => any)[]) =>
+    async (config: { headers: { authorization: string } }) => {
         const token = config.headers.authorization?.split(" ")[1];
 
         //  verify access token if present
@@ -30,7 +34,10 @@ export const withAuth =
         return typeof data[0] === "function" ? data[0](config) : data;
     };
 
-export const verifyToken = async (token, options = undefined) => {
+export const verifyToken = async (
+    token: string | Uint8Array<ArrayBufferLike>,
+    options?: VerifyTokenOptions
+) => {
     try {
         const verification = await jose.jwtVerify(token, jwtSecret);
         return options?.returnPayload ? verification.payload : true;
