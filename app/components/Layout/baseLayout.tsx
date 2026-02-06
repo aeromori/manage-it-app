@@ -29,7 +29,7 @@ const BaseLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             {/* <Header /> */}
-            <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 flex">
+            <div className="min-h-screen bg-linear-to-br from-amber-50 via-orange-50 to-rose-50 flex">
                 {/* Sidebar */}
                 <SideBar
                     setActivePage={setActivePage}
@@ -57,7 +57,7 @@ const BaseLayout = ({ children }: { children: React.ReactNode }) => {
                         </div>
                         <div className="w-10" />
                     </div>
-                    <div className="container mx-auto px-4 md:px-8 py-4 md:py-8 max-w-7xl">
+                    <div className="container mx-auto px-4 md:px-8 py-4 md:py-8 max-w-8xl">
                         {children}
                     </div>
                 </div>

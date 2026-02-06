@@ -9,8 +9,8 @@ import {
     ArrowRightEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/state/store";
-import { loginAsync, resetState } from "@/app/state/slices/authSlice";
+import { AppDispatch, RootState } from "../../state/store";
+import { loginAsync, resetState } from "../../state/slices/authSlice";
 
 interface AuthCredentials {
     id: string;
