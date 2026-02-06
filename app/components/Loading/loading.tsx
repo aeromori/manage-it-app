@@ -1,12 +1,10 @@
-import Image from "next/image";
 import { Spinner } from "flowbite-react";
 
-export default function Loading() {
-    // Or a custom loading skeleton component
+export default function Loading({ text }: { text?: string }) {
     return (
-        <div className=" rounded-2xl mt-5 mb-5 p-10 bg-amber-500">
+        <div className="flex items-center justify-center">
             <Spinner aria-label="Spinner" size="sm" light />
+            <span className="pl-3 loading-dots">{`${text ?? "Loading"}`}</span>
         </div>
     );
-    // return <p>Loading...</p>;
 }
