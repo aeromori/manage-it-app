@@ -20,7 +20,7 @@ export const useAuth = () => {
     return authContext;
 };
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = () => {
     const [token, setToken] = useState<undefined | null | string>();
 
     useEffect(() => {
