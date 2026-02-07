@@ -17,6 +17,8 @@ import {
     resetState,
 } from "@/app/state/slices/userSlice";
 
+import Alert from "../Alert/alert";
+
 interface User {
     _id: string;
     name: string;
@@ -36,7 +38,7 @@ const UserListTable = () => {
     const userLoading = useSelector(
         (state: RootState) => state.users.userLoading
     );
-    const error = useSelector((state: RootState) => state.users.error);
+    const meta = useSelector((state: RootState) => state.users.meta);
 
     //  component state
     const [openModal, setOpenModal] = useState(false);
@@ -130,11 +132,11 @@ const UserListTable = () => {
                             </td>
                         </tr>
                     )}
-                    {!loading && error && (
+                    {!loading && users.length === 0 && (
                         <tr>
                             <td colSpan={2} className="p-2 text-center">
                                 <div className="p-4 text-center text-red-600">
-                                    {error}
+                                    No Users Found
                                 </div>
                             </td>
                         </tr>

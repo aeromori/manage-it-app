@@ -1,7 +1,11 @@
 import * as React from "react";
 import { Card as FBCard } from "flowbite-react";
 
-type CardProps = React.ComponentProps<typeof FBCard>;
+type CardProps = React.PropsWithChildren<
+    React.HTMLAttributes<HTMLDivElement> & {
+        className?: string;
+    }
+>;
 type CardHeaderProps = React.HTMLAttributes<HTMLDivElement>;
 type CardTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
 type CardDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
@@ -9,18 +13,14 @@ type CardActionProps = React.HTMLAttributes<HTMLDivElement>;
 type CardContentProps = React.HTMLAttributes<HTMLDivElement>;
 type CardFooterProps = React.HTMLAttributes<HTMLDivElement>;
 
-function Card({
-    children,
-    className,
-    ...props
-}: React.PropsWithChildren<{ className?: string }>) {
+function Card({ children, className, ...props }: CardProps) {
     return (
         <FBCard
             data-slot="card"
             className={`bg-card text-card-foreground flex flex-col gap-6 rounded-xl border ${className}`}
             {...props}
         >
-            <div className={`flex flex-col gap-4 justify-start ${className}`}>
+            <div className={`flex flex-col gap-4 justify-start h-full w-full`}>
                 {children}
             </div>
         </FBCard>
