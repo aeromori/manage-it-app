@@ -28,8 +28,8 @@ const LoginForm = () => {
     const error = useSelector((state: RootState) => state.auth.error);
 
     //  states
-    const [username, setUsername] = useState("adrian25");
-    const [password, setPassword] = useState("ryuzakiL-25");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
