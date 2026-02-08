@@ -1,4 +1,3 @@
-import React from "react";
 import UserListTable from "./userListTable";
 
 interface User {
@@ -6,19 +5,11 @@ interface User {
     name: string;
 }
 
-const UsersList = async () => {
-    const res = await fetch(
-        "https://jsonplaceholder.typicode.com/users",
-        { cache: "no-store" } //  always give fresh data
-        // { next: { revalidate: 10 } }
-    );
-
-    const users: User[] = await res.json();
-
+const UsersList = () => {
     return (
-        <div>
-            <UserListTable users={users} />
-        </div>
+        <>
+            <UserListTable />
+        </>
     );
 };
 
