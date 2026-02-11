@@ -3,12 +3,14 @@ import authReducer from "../slices/authSlice";
 import usersReducer from "../slices/userSlice";
 import alertReducer from "../slices/alertSlice";
 import incomeReducer from "../slices/incomeSlice";
+import expenseReducer from "../slices/expenseSlice";
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
         users: usersReducer,
         income: incomeReducer,
+        expense: expenseReducer,
         alert: alertReducer,
     },
 });
