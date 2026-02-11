@@ -43,9 +43,10 @@ const userSlice = createSlice({
             state.loading = action.payload;
         },
         resetState(state) {
-            state.loading = false;
-            state.users = [];
-            state.meta = null;
+            state = initialState;
+            // state.loading = false;
+            // state.users = [];
+            // state.meta = null;
         },
     },
     extraReducers: (builder) => {

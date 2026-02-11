@@ -3,52 +3,58 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { hideAlert, showAlert } from "./alertSlice";
 import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 interface Meta {
     code: number;
     message: string;
 }
 
-interface income {
+interface expense {
     _id: string;
-    // user_id: string;
-    income_amount: number;
-    savings_goal: number;
-    period_date: Date;
+    monthly_budget_id: string;
+    category_id: string;
+    amount: number;
+    description: string;
+    expense_date: Date;
 }
 
-interface incomeState {
+interface category {
+    _id: string;
+    category: string;
+    description: string;
+}
+
+interface expenseState {
     loading: boolean;
     loadingSubmit: boolean;
-    income: income | null;
+    expense: expense | null;
+    categories: category[] | [];
     meta: Meta | null;
 }
 
-const initialState: incomeState = {
+const initialState: expenseState = {
     loading: true,
     loadingSubmit: false,
-    income: null,
+    expense: null,
+    categories: [],
     meta: null,
 };
 
 const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const fetchIncomeAsync = createAsyncThunk<
+export const getExpenseAsync = createAsyncThunk<
     any,
     void,
     { rejectValue: Meta }
->("income/fetchIncomeAsync", async (_, { rejectWithValue, dispatch }) => {
+>("expense/getExpenseAsync", async (_, { rejectWithValue, dispatch }) => {
     const user = await Cookies.get("user");
     const token = JSON.parse(user || "{}").accessToken;
-    const dateToday = dayjs().format("YYYY-MM-DD");
 
     try {
-        const response = await api.get(`${baseApiUrl}/monthly-budget`, {
+        const response = await api.get(`${baseApiUrl}/expenses/categories`, {
             headers: {
                 authorization: `Bearer ${token}`,
-            },
-            params: {
-                dateToday,
             },
         });
 
@@ -71,29 +77,30 @@ export const fetchIncomeAsync = createAsyncThunk<
             code: error.response?.status ?? 500,
             message:
                 error.response?.data?.message ??
-                "Failed to fetch income details",
+                "Failed to fetch expense categories",
         });
     }
 });
 
-export const saveIncomeAsync = createAsyncThunk<
+export const saveExpenseAsync = createAsyncThunk<
     any,
     {
-        income_amount: number;
-        savings_goal: number;
-        period_date: string;
+        category_id: string;
+        amount: number;
+        description: string;
+        expense_date: string;
     },
     { rejectValue: Meta }
 >(
-    "income/saveIncomeAsync",
-    async (incomeData, { rejectWithValue, dispatch }) => {
+    "expense/saveExpenseAsync",
+    async (expenseData, { rejectWithValue, dispatch }) => {
         const user = await Cookies.get("user");
         const token = JSON.parse(user || "{}").accessToken;
 
         try {
             const response = await api.post(
-                `${baseApiUrl}/monthly-budget`,
-                incomeData,
+                `${baseApiUrl}/expenses`,
+                expenseData,
                 {
                     headers: {
                         authorization: `Bearer ${token}`,
@@ -104,7 +111,7 @@ export const saveIncomeAsync = createAsyncThunk<
             dispatch(
                 showAlert({
                     type: "success",
-                    message: "Income data saved successfully",
+                    message: "Expense saved successfully",
                 })
             );
 
@@ -133,14 +140,14 @@ export const saveIncomeAsync = createAsyncThunk<
             }
 
             return rejectWithValue(
-                error.response?.data?.message || "Failed to save income data"
+                error.response?.data?.message || "Failed to save expense"
             );
         }
     }
 );
 
-const incomeSlice = createSlice({
-    name: "income",
+const expenseSlice = createSlice({
+    name: "expense",
     initialState,
     reducers: {
         setLoading(state, action: PayloadAction<boolean>) {
@@ -149,51 +156,57 @@ const incomeSlice = createSlice({
         resetState(state) {
             state = initialState;
             // state.loading = false;
-            // state.income = null;
+            // state.loadingSubmit = false;
+            // state.expense = null;
             // state.meta = null;
+        },
+        resetMeta(state) {
+            state.meta = null;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchIncomeAsync.pending, (state) => {
-                state.income = null;
+            //  Get Expense Categories
+            .addCase(getExpenseAsync.pending, (state) => {
                 state.loading = true;
-                state.meta = null;
+                state.categories = [];
             })
-            .addCase(fetchIncomeAsync.fulfilled, (state, action) => {
+            .addCase(getExpenseAsync.fulfilled, (state, action) => {
                 state.loading = false;
-                state.income = action.payload;
-                state.meta = null;
+                state.categories = action.payload;
             })
-            .addCase(fetchIncomeAsync.rejected, (state, action) => {
+            .addCase(getExpenseAsync.rejected, (state, action) => {
                 state.loading = false;
-                state.income = null;
+                state.categories = [];
                 state.meta = action.payload ?? {
                     code: 500,
-                    message: "Failed to fetch income details",
+                    message: "Failed to fetch expense categories",
                 };
             })
 
-            // Save Income Data
-            .addCase(saveIncomeAsync.pending, (state) => {
+            //  Save Expense
+            .addCase(saveExpenseAsync.pending, (state) => {
                 state.loadingSubmit = true;
                 state.meta = null;
             })
-            .addCase(saveIncomeAsync.fulfilled, (state, action) => {
+            .addCase(saveExpenseAsync.fulfilled, (state, action) => {
                 state.loadingSubmit = false;
-                state.income = action.payload;
-                state.meta = null;
+                state.expense = action.payload;
+                state.meta = {
+                    code: 200,
+                    message: "Expense saved successfully",
+                };
             })
-            .addCase(saveIncomeAsync.rejected, (state, action) => {
+            .addCase(saveExpenseAsync.rejected, (state, action) => {
                 state.loadingSubmit = false;
                 state.meta = action.payload ?? {
                     code: 500,
-                    message: "Failed to save income data",
+                    message: "Failed to save expense data",
                 };
             });
     },
 });
 
-export const { setLoading, resetState } = incomeSlice.actions;
+export const { setLoading, resetState, resetMeta } = expenseSlice.actions;
 
-export default incomeSlice.reducer;
+export default expenseSlice.reducer;
