@@ -1,4 +1,4 @@
-import React, { ComponentType, SVGProps } from "react";
+import { Dispatch, SetStateAction } from "react";
 import {
     Card,
     CardContent,
@@ -7,34 +7,32 @@ import {
     CardTitle,
 } from "../ui/card";
 import { Button, Label, Spinner, Textarea, TextInput } from "flowbite-react";
-import {
-    ArrowDownCircleIcon,
-    CurrencyDollarIcon,
-} from "@heroicons/react/24/outline";
+import { CurrencyDollarIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { CategoryWithUI } from "../../types/expenses";
 
-type Category = {
-    title: string;
+type Expense = {
+    selectedCategory: string;
+    amount: string;
     description: string;
-    type: string;
-    icon: ComponentType<SVGProps<SVGSVGElement>>;
-    color: string;
-    gradient: string;
-    border: string;
-    iconColor: string;
 };
 
 type ExpenseDetailsProps = {
-    selectedCategoryData: Category | undefined;
+    selectedCategoryData: CategoryWithUI | undefined;
     loadingSubmit: boolean;
+    amount: string;
+    description: string;
+    setExpense: Dispatch<SetStateAction<Expense>>;
     handleSave: () => void;
 };
 
 const ExpenseDetails = ({
     selectedCategoryData,
     loadingSubmit,
+    amount,
+    description,
+    setExpense,
     handleSave,
 }: ExpenseDetailsProps) => {
-    console.log({ selectedCategoryData });
     return (
         <>
             <Card
@@ -58,22 +56,22 @@ const ExpenseDetails = ({
                                 id="income"
                                 type="number"
                                 className="
-                                [&_input]:bg-green-50
-                                [&_input]:border-green-300
-                                [&_input]:focus:ring-green-400
-                                [&_input]:focus:border-green-400
+                                    [&_input]:bg-green-50
+                                    [&_input]:border-green-300
+                                    [&_input]:focus:ring-green-400
+                                    [&_input]:focus:border-green-400
                                 "
-                                // value={monthlyIncome.income}
-                                // onChange={(e) =>
-                                //     setMonthlyIncome({
-                                //         ...monthlyIncome,
-                                //         income: e.target.value,
-                                //     })
-                                // }
                                 icon={CurrencyDollarIcon}
                                 color="success"
                                 placeholder="0.00"
                                 step="0.01"
+                                value={amount}
+                                onChange={(e) =>
+                                    setExpense((prev) => ({
+                                        ...prev,
+                                        amount: e.target.value,
+                                    }))
+                                }
                             />
                         </div>
                         <Label htmlFor="income" className="text-orange-900">
@@ -83,20 +81,20 @@ const ExpenseDetails = ({
                             <Textarea
                                 id="income"
                                 className="
-                                [&_input]:bg-green-50
-                                [&_input]:border-green-300
-                                [&_input]:focus:ring-green-400
-                                [&_input]:focus:border-green-400
+                                    [&_input]:bg-green-50
+                                    [&_input]:border-green-300
+                                    [&_input]:focus:ring-green-400
+                                    [&_input]:focus:border-green-400
                                 "
-                                // value={monthlyIncome.income}
-                                // onChange={(e) =>
-                                //     setMonthlyIncome({
-                                //         ...monthlyIncome,
-                                //         income: e.target.value,
-                                //     })
-                                // }
                                 color="success"
                                 placeholder="What did you buy?"
+                                value={description}
+                                onChange={(e) => {
+                                    setExpense((prev) => ({
+                                        ...prev,
+                                        description: e.target.value,
+                                    }));
+                                }}
                             />
                         </div>
                     </div>
@@ -106,10 +104,11 @@ const ExpenseDetails = ({
                             size="lg"
                             onClick={() => handleSave()}
                             type="submit"
+                            disabled={!amount || loadingSubmit}
                         >
                             {!loadingSubmit && (
                                 <>
-                                    <ArrowDownCircleIcon className="size-4 mr-2" />
+                                    <PlusIcon className="size-4 mr-2" />
                                     Add Expense
                                 </>
                             )}

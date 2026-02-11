@@ -56,7 +56,6 @@ const Income = () => {
         parseFloat(monthlyIncome.savings || "0");
 
     const handleSave = () => {
-        console.log("Saved income and savings goal: ", { monthlyIncome });
         dispatch(
             saveIncomeAsync({
                 income_amount: parseFloat(monthlyIncome.income || "0"),
