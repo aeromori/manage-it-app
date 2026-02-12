@@ -59,7 +59,7 @@ const LoginForm = () => {
     }, [user]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-linear-to-br from-amber-50 via-orange-50 to-rose-50 flex items-center justify-center px-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-lg shadow-lg border border-orange-200 p-8">
                     {/* Logo and Title */}
