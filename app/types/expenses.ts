@@ -11,6 +11,8 @@ export type CategoryType = "survival" | "optional" | "culture" | "unexpected";
 export type CategoryUIConfig = {
     icon: ComponentType<any>;
     gradient: string;
+    backgroundColor: string;
+    textColor: string;
     border: string;
     iconColor: string;
     color: string;
