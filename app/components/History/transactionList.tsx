@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
 import { CalendarDateRangeIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { Button } from "flowbite-react";
+import { Button, Spinner } from "flowbite-react";
 import dayjs from "dayjs";
 
 type Category = {
@@ -34,6 +34,8 @@ type TransactionListProps = {
     formatCurrency: (amount: number) => string;
     deleteTransaction: (transactionId: string) => void;
     loading: boolean;
+    loadingDelete: boolean;
+    deletingTransactionId: string | null;
 };
 const TransactionList = ({
     selectedDate,
@@ -41,16 +43,11 @@ const TransactionList = ({
     formatCurrency,
     deleteTransaction,
     loading,
+    loadingDelete,
+    deletingTransactionId,
 }: TransactionListProps) => {
     const formatDate = (dateString: string) => {
         return dayjs(dateString).format("MMM D, YYYY");
-        // return new Date(dateString).toLocaleDateString("en-US", {
-        //     month: "short",
-        //     day: "numeric",
-        //     year: "numeric",
-        //     hour: "2-digit",
-        //     minute: "2-digit",
-        // });
     };
 
     const formatMonthYear = (date: Date) => {
@@ -81,10 +78,7 @@ const TransactionList = ({
     return (
         <div className="space-y-3">
             {filteredTransactions.length === 0 ? (
-                <Card
-                    key="empty"
-                    className="border-orange-200 bg-white/80 backdrop-blur"
-                >
+                <Card key="empty" className="border-orange-200 bg-white/80">
                     <CardContent className="pt-6">
                         <div className="text-center py-8 text-orange-600">
                             <CalendarDateRangeIcon className="size-12 mx-auto mb-3 opacity-50" />
@@ -108,7 +102,7 @@ const TransactionList = ({
                     return (
                         <Card
                             key={transaction._id}
-                            className="border-orange-200 bg-white/80 backdrop-blur hover:shadow-md transition-shadow"
+                            className="border-orange-200 bg-white/80 hover:shadow-md transition-shadow"
                         >
                             <CardContent className="pt-6">
                                 <div className="flex items-start gap-4">
@@ -166,7 +160,16 @@ const TransactionList = ({
                                                 }
                                                 className="text-red-600 hover:text-red-700 hover:bg-red-50 bg-transparent"
                                             >
-                                                <TrashIcon className="size-5" />
+                                                {loadingDelete &&
+                                                deletingTransactionId ===
+                                                    transaction._id ? (
+                                                    <Spinner
+                                                        size="sm"
+                                                        color="failure"
+                                                    />
+                                                ) : (
+                                                    <TrashIcon className="size-5" />
+                                                )}
                                             </Button>
                                         </div>
                                     </div>

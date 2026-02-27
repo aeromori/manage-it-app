@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../state/store";
 import {
     getExpensesAsync,
     getCategoriesAsync,
+    deleteExpenseAsync,
     resetState,
 } from "../../state/slices/historySlice";
 import { normalizeCategory } from "@/app/lib/utils";
@@ -44,12 +45,16 @@ const History = () => {
     const loadingCategories = useSelector(
         (state: RootState) => state.history.loadingCategories
     );
+    const loadingDelete = useSelector(
+        (state: RootState) => state.history.loadingDelete
+    );
     const transactions = useSelector(
         (state: RootState) => state.history.transactions
     );
     const categories = useSelector(
         (state: RootState) => state.history.categories
     );
+    const meta = useSelector((state: RootState) => state.history.meta);
 
     const [filters, setFilters] = useState<{
         category_id: string;
@@ -59,6 +64,9 @@ const History = () => {
         month: null,
     });
     const [total, setTotal] = useState<number>(0);
+    const [deletingTransactionId, setDeletingTransactionId] = useState<
+        string | null
+    >(null);
 
     const transactionsWithUI: Transaction[] = transactions.map((txn) => {
         const key = normalizeCategory(txn.category_id.category);
@@ -96,6 +104,12 @@ const History = () => {
         );
     }, [filters]);
 
+    useEffect(() => {
+        if (loadingDelete === false && deletingTransactionId) {
+            setDeletingTransactionId(null);
+        }
+    }, [meta]);
+
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat("en-US", {
             style: "currency",
@@ -104,7 +118,10 @@ const History = () => {
     };
 
     const deleteTransaction = (transactionId: string) => {
-        console.log(`Delete transaction with ID: ${transactionId}`);
+        if (confirm("Are you sure you want to delete this transaction?")) {
+            setDeletingTransactionId(transactionId);
+            dispatch(deleteExpenseAsync(transactionId));
+        }
     };
 
     return (
@@ -126,6 +143,8 @@ const History = () => {
                 formatCurrency={formatCurrency}
                 deleteTransaction={deleteTransaction}
                 loading={loading}
+                loadingDelete={loadingDelete}
+                deletingTransactionId={deletingTransactionId}
             />
         </>
     );
