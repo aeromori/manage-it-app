@@ -26,8 +26,8 @@ const ExpenseCategory = ({
             <div className="justify-center h-full w-full">
                 <Card className="border-orange-200 bg-white/80 backdrop-blur">
                     <Loading
-                        aria-label="Loading monthly income data"
-                        text="Loading monthly income data"
+                        aria-label="Loading Categories"
+                        text="Loading Categories"
                     />
                 </Card>
             </div>

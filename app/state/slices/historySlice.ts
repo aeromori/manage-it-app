@@ -9,33 +9,33 @@ interface Meta {
     message: string;
 }
 
-interface expense {
-    _id: string;
-    monthly_budget_id: string;
-    category_id: string;
-    amount: number;
-    description: string;
-    expense_date: Date;
-}
-
 interface category {
     _id: string;
     category: string;
     description: string;
 }
 
+interface transaction {
+    _id: string;
+    monthly_budget_id: string;
+    category_id: category;
+    amount: number;
+    description: string;
+    expense_date: Date;
+}
+
 interface expenseState {
     loading: boolean;
-    loadingSubmit: boolean;
-    expense: expense | null;
+    loadingCategories: boolean;
+    transactions: transaction[];
     categories: category[] | [];
     meta: Meta | null;
 }
 
 const initialState: expenseState = {
     loading: true,
-    loadingSubmit: false,
-    expense: null,
+    loadingCategories: true,
+    transactions: [],
     categories: [],
     meta: null,
 };
@@ -81,82 +81,49 @@ export const getCategoriesAsync = createAsyncThunk<
     }
 });
 
-export const saveExpenseAsync = createAsyncThunk<
+export const getExpensesAsync = createAsyncThunk<
     any,
-    {
-        category_id: string;
-        amount: number;
-        description: string;
-        expense_date: string;
-    },
+    { date?: Date; category_id?: string },
     { rejectValue: Meta }
->(
-    "expense/saveExpenseAsync",
-    async (expenseData, { rejectWithValue, dispatch }) => {
-        const user = await Cookies.get("user");
-        const token = JSON.parse(user || "{}").accessToken;
+>("expense/getExpensesAsync", async (query, { rejectWithValue, dispatch }) => {
+    const user = await Cookies.get("user");
+    const token = JSON.parse(user || "{}").accessToken;
 
-        try {
-            const response = await api.post(
-                `${baseApiUrl}/expenses`,
-                expenseData,
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+    try {
+        const response = await api.get(`${baseApiUrl}/expenses`, {
+            headers: {
+                authorization: `Bearer ${token}`,
+            },
+            params: {
+                date: query.date
+                    ? dayjs(query.date).format("YYYY-MM-DD")
+                    : undefined,
+                category_id: query.category_id || undefined,
+            },
+        });
 
-            dispatch(
-                showAlert({
-                    type: "success",
-                    message: "Expense saved successfully",
-                })
-            );
-
-            setTimeout(() => {
-                dispatch(hideAlert());
-            }, 3000);
-
-            return response.data;
-        } catch (error: any) {
-            if (!error.response) {
-                dispatch(
-                    showAlert({
-                        type: "error",
-                        message: "Network error. Please check your connection",
-                    })
-                );
-
-                setTimeout(() => {
-                    dispatch(hideAlert());
-                }, 3000);
-
-                return rejectWithValue({
-                    code: 0,
-                    message: "Network error. Please check your connection",
-                });
-            }
-
+        return response.data;
+    } catch (error: any) {
+        if (!error.response) {
             dispatch(
                 showAlert({
                     type: "error",
-                    message:
-                        error.response?.data?.message ||
-                        "Failed to save expense",
+                    message: "Network error. Please check your connection",
                 })
             );
 
             setTimeout(() => {
                 dispatch(hideAlert());
             }, 3000);
-
-            return rejectWithValue(
-                error.response?.data?.message || "Failed to save expense"
-            );
         }
+
+        return rejectWithValue({
+            code: error.response?.status ?? 500,
+            message:
+                error.response?.data?.message ?? "Failed to fetch expenses",
+        });
     }
-);
+});
 
 const expenseSlice = createSlice({
     name: "expense",
@@ -167,53 +134,44 @@ const expenseSlice = createSlice({
         },
         resetState(state) {
             state = initialState;
-            // state.loading = false;
-            // state.loadingSubmit = false;
-            // state.expense = null;
-            // state.meta = null;
         },
         resetMeta(state) {
             state.meta = null;
         },
     },
     extraReducers: (builder) => {
+        //  Get Expenses
         builder
             //  Get Expense Categories
             .addCase(getCategoriesAsync.pending, (state) => {
-                state.loading = true;
+                state.loadingCategories = true;
                 state.categories = [];
             })
             .addCase(getCategoriesAsync.fulfilled, (state, action) => {
-                state.loading = false;
+                state.loadingCategories = false;
                 state.categories = action.payload;
             })
             .addCase(getCategoriesAsync.rejected, (state, action) => {
-                state.loading = false;
+                state.loadingCategories = false;
                 state.categories = [];
                 state.meta = action.payload ?? {
                     code: 500,
                     message: "Failed to fetch expense categories",
                 };
             })
-
-            //  Save Expense
-            .addCase(saveExpenseAsync.pending, (state) => {
-                state.loadingSubmit = true;
-                state.meta = null;
+            .addCase(getExpensesAsync.pending, (state) => {
+                state.loading = true;
             })
-            .addCase(saveExpenseAsync.fulfilled, (state, action) => {
-                state.loadingSubmit = false;
-                state.expense = action.payload;
-                state.meta = {
-                    code: 200,
-                    message: "Expense saved successfully",
-                };
+            .addCase(getExpensesAsync.fulfilled, (state, action) => {
+                state.loading = false;
+                state.transactions = action.payload;
             })
-            .addCase(saveExpenseAsync.rejected, (state, action) => {
-                state.loadingSubmit = false;
+            .addCase(getExpensesAsync.rejected, (state, action) => {
+                state.loading = false;
+                state.transactions = [];
                 state.meta = action.payload ?? {
                     code: 500,
-                    message: "Failed to save expense data",
+                    message: "Failed to fetch expenses",
                 };
             });
     },
