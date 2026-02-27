@@ -4,6 +4,7 @@ import usersReducer from "../slices/userSlice";
 import alertReducer from "../slices/alertSlice";
 import incomeReducer from "../slices/incomeSlice";
 import expenseReducer from "../slices/expenseSlice";
+import historyReducer from "../slices/historySlice";
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         users: usersReducer,
         income: incomeReducer,
         expense: expenseReducer,
+        history: historyReducer,
         alert: alertReducer,
     },
 });

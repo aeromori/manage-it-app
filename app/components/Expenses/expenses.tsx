@@ -1,12 +1,6 @@
 "use client";
 
-import { useState, ComponentType, SVGProps, useEffect } from "react";
-import {
-    BookOpenIcon,
-    ExclamationCircleIcon,
-    HomeIcon,
-    ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { useState, useEffect } from "react";
 
 import ExpenseCategory from "./expenseCategory";
 import ExpenseDetails from "./expenseDetails";
@@ -15,17 +9,15 @@ import ExpenseQuestions from "./expenseQuestions";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
 import {
-    getExpenseAsync,
+    getCategoriesAsync,
     resetMeta,
     resetState,
     saveExpenseAsync,
 } from "../../state/slices/expenseSlice";
 import dayjs from "dayjs";
-import {
-    CategoryType,
-    CategoryUIConfig,
-    CategoryWithUI,
-} from "../../types/expenses";
+import { CategoryType, CategoryWithUI } from "../../types/expenses";
+import { categoryUIConfig } from "@/app/lib/category/ui-config";
+import { normalizeCategory } from "@/app/lib/utils";
 
 type Expense = {
     selectedCategory: string;
@@ -50,46 +42,6 @@ const Expenses = () => {
         description: "",
     });
 
-    const categoryUIConfig: Record<CategoryType, CategoryUIConfig> = {
-        survival: {
-            icon: HomeIcon,
-            gradient: "from-red-50 to-red-100",
-            border: "border-red-200",
-            iconColor: "text-red-600",
-            color: "red",
-        },
-        optional: {
-            icon: ShoppingCartIcon,
-            gradient: "from-blue-50 to-blue-100",
-            border: "border-blue-200",
-            iconColor: "text-blue-600",
-            color: "blue",
-        },
-        culture: {
-            icon: BookOpenIcon,
-            gradient: "from-green-50 to-green-100",
-            border: "border-green-200",
-            iconColor: "text-green-600",
-            color: "green",
-        },
-        unexpected: {
-            icon: ExclamationCircleIcon,
-            gradient: "from-yellow-50 to-yellow-100",
-            border: "border-yellow-200",
-            iconColor: "text-yellow-600",
-            color: "yellow",
-        },
-    };
-
-    const normalizeCategory = (label: string): CategoryType => {
-        if (label.includes("Survival")) return "survival";
-        if (label.includes("Optional")) return "optional";
-        if (label.includes("Culture")) return "culture";
-        if (label.includes("Unexpected")) return "unexpected";
-
-        throw new Error(`Unknown category: ${label}`);
-    };
-
     const categories: CategoryWithUI[] = categoryList.map((cat) => {
         const key = normalizeCategory(cat.category);
         return {
@@ -100,7 +52,7 @@ const Expenses = () => {
     });
 
     useEffect(() => {
-        dispatch(getExpenseAsync());
+        dispatch(getCategoriesAsync());
         return () => {
             dispatch(resetState());
         };
