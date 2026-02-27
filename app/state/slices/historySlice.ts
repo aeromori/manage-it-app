@@ -27,6 +27,7 @@ interface transaction {
 interface expenseState {
     loading: boolean;
     loadingCategories: boolean;
+    loadingDelete: boolean;
     transactions: transaction[];
     categories: category[] | [];
     meta: Meta | null;
@@ -35,6 +36,7 @@ interface expenseState {
 const initialState: expenseState = {
     loading: true,
     loadingCategories: true,
+    loadingDelete: false,
     transactions: [],
     categories: [],
     meta: null,
@@ -125,6 +127,79 @@ export const getExpensesAsync = createAsyncThunk<
     }
 });
 
+export const deleteExpenseAsync = createAsyncThunk<
+    any,
+    string,
+    { rejectValue: Meta }
+>(
+    "expense/deleteExpenseAsync",
+    async (expenseId, { rejectWithValue, dispatch }) => {
+        const user = await Cookies.get("user");
+        const token = JSON.parse(user || "{}").accessToken;
+
+        try {
+            const response = await api.delete(
+                `${baseApiUrl}/expenses/${expenseId}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            dispatch(
+                showAlert({
+                    type: "success",
+                    message: "Expense deleted successfully",
+                })
+            );
+
+            setTimeout(() => {
+                dispatch(hideAlert());
+            }, 3000);
+
+            return expenseId;
+        } catch (error: any) {
+            if (!error.response) {
+                dispatch(
+                    showAlert({
+                        type: "error",
+                        message: "Network error. Please check your connection",
+                    })
+                );
+
+                setTimeout(() => {
+                    dispatch(hideAlert());
+                }, 3000);
+
+                return rejectWithValue({
+                    code: 503,
+                    message: "Network error. Please check your connection",
+                });
+            }
+
+            dispatch(
+                showAlert({
+                    type: "error",
+                    message:
+                        error.response?.data?.message ??
+                        "Failed to delete expense",
+                })
+            );
+
+            setTimeout(() => {
+                dispatch(hideAlert());
+            }, 3000);
+
+            return rejectWithValue({
+                code: error.response?.status ?? 500,
+                message:
+                    error.response?.data?.message ?? "Failed to delete expense",
+            });
+        }
+    }
+);
+
 const expenseSlice = createSlice({
     name: "expense",
     initialState,
@@ -161,6 +236,7 @@ const expenseSlice = createSlice({
             })
             .addCase(getExpensesAsync.pending, (state) => {
                 state.loading = true;
+                state.transactions = [];
             })
             .addCase(getExpensesAsync.fulfilled, (state, action) => {
                 state.loading = false;
@@ -172,6 +248,23 @@ const expenseSlice = createSlice({
                 state.meta = action.payload ?? {
                     code: 500,
                     message: "Failed to fetch expenses",
+                };
+            })
+
+            .addCase(deleteExpenseAsync.pending, (state) => {
+                state.loadingDelete = true;
+            })
+            .addCase(deleteExpenseAsync.fulfilled, (state, action) => {
+                state.loadingDelete = false;
+                state.transactions = state.transactions.filter(
+                    (transaction) => transaction._id !== action.payload
+                );
+            })
+            .addCase(deleteExpenseAsync.rejected, (state, action) => {
+                state.loadingDelete = false;
+                state.meta = action.payload ?? {
+                    code: 500,
+                    message: "Failed to delete expense",
                 };
             });
     },

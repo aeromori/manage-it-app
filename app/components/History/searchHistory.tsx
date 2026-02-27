@@ -47,8 +47,6 @@ const SearchHistory = ({
         }
     }, [filters.month]);
 
-    console.log({ filters });
-
     return (
         <div className="space-y-3">
             <Card className="border-orange-200 bg-white/80 backdrop-blur">
@@ -106,9 +104,9 @@ const SearchHistory = ({
                                         defaultValue={
                                             filters.month ?? undefined
                                         }
-                                        showClearButton={true}
+                                        showClearButton={false}
+                                        showTodayButton={false}
                                         onChange={(date) => {
-                                            console.log(date);
                                             setFilters((prev) => ({
                                                 ...prev,
                                                 month: date,
@@ -125,8 +123,6 @@ const SearchHistory = ({
                                             color={"yellow"}
                                             size="icon"
                                             onClick={() => {
-                                                // Reset filters logic here
-                                                console.log("Reset filters");
                                                 setFilters((prev) => ({
                                                     ...prev,
                                                     // category: "all",
