@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@heroicons/react": "^2.2.0",
+        "@radix-ui/react-progress": "^1.1.8",
         "@reduxjs/toolkit": "^2.11.2",
         "@tailwindcss/postcss": "^4.1.16",
         "@types/node": "24.9.1",

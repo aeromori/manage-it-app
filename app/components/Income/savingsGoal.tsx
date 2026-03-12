@@ -8,9 +8,8 @@ import {
     CardHeader,
     CardTitle,
 } from "../ui/card";
-import { FlagIcon } from "@heroicons/react/24/outline";
 import { Label, TextInput } from "flowbite-react";
-import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { CurrencyDollarIcon, FlagIcon } from "@heroicons/react/24/outline";
 import Loading from "../Loading/loading";
 
 type MonthlyIncomeProps = {
