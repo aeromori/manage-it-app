@@ -3,6 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { CalendarDateRangeIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Button, Spinner } from "flowbite-react";
 import dayjs from "dayjs";
+import { formatCurrency } from "../../lib/utils";
 
 type Category = {
     _id: string;
@@ -31,7 +32,6 @@ type Transaction = {
 type TransactionListProps = {
     selectedDate: Date | null;
     filteredTransactions: Transaction[];
-    formatCurrency: (amount: number) => string;
     deleteTransaction: (transactionId: string) => void;
     loading: boolean;
     loadingDelete: boolean;
@@ -40,7 +40,6 @@ type TransactionListProps = {
 const TransactionList = ({
     selectedDate,
     filteredTransactions,
-    formatCurrency,
     deleteTransaction,
     loading,
     loadingDelete,
@@ -120,14 +119,14 @@ const TransactionList = ({
                                                 </div>
                                                 <div className="text-orange-600 text-sm">
                                                     {formatDate(
-                                                        transaction.expense_date.toString()
+                                                        transaction.expense_date.toString(),
                                                     )}
                                                 </div>
                                             </div>
                                             <div className="text-right shrink-0">
                                                 <div className="text-red-700">
                                                     {formatCurrency(
-                                                        transaction.amount
+                                                        transaction.amount,
                                                     )}
                                                 </div>
                                             </div>
@@ -142,7 +141,7 @@ const TransactionList = ({
                                                         .charAt(0)
                                                         .toUpperCase() +
                                                         transaction.category_id.category.slice(
-                                                            1
+                                                            1,
                                                         )}{" "}
                                                 </span>
                                             </div>
@@ -155,7 +154,7 @@ const TransactionList = ({
                                                 size="sm"
                                                 onClick={() =>
                                                     deleteTransaction(
-                                                        transaction._id
+                                                        transaction._id,
                                                     )
                                                 }
                                                 className="text-red-600 hover:text-red-700 hover:bg-red-50 bg-transparent"
