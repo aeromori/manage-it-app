@@ -1,16 +1,12 @@
+import { formatCurrency } from "../../lib/utils";
 import { Card, CardContent } from "../ui/card";
 
 type TransactionListProps = {
     total: number;
     numTransactions: number;
-    formatCurrency: (amount: number) => string;
 };
 
-const TotalExpenses = ({
-    total,
-    numTransactions,
-    formatCurrency,
-}: TransactionListProps) => {
+const TotalExpenses = ({ total, numTransactions }: TransactionListProps) => {
     return (
         <div className="space-y-3">
             {/* Summary */}

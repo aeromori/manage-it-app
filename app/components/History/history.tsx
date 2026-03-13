@@ -43,16 +43,16 @@ const History = () => {
     const dispatch = useDispatch<AppDispatch>();
     const loading = useSelector((state: RootState) => state.history.loading);
     const loadingCategories = useSelector(
-        (state: RootState) => state.history.loadingCategories
+        (state: RootState) => state.history.loadingCategories,
     );
     const loadingDelete = useSelector(
-        (state: RootState) => state.history.loadingDelete
+        (state: RootState) => state.history.loadingDelete,
     );
     const transactions = useSelector(
-        (state: RootState) => state.history.transactions
+        (state: RootState) => state.history.transactions,
     );
     const categories = useSelector(
-        (state: RootState) => state.history.categories
+        (state: RootState) => state.history.categories,
     );
     const meta = useSelector((state: RootState) => state.history.meta);
 
@@ -100,7 +100,7 @@ const History = () => {
             getExpensesAsync({
                 category_id: filters.category_id,
                 date: filters.month || undefined,
-            })
+            }),
         );
     }, [filters]);
 
@@ -109,13 +109,6 @@ const History = () => {
             setDeletingTransactionId(null);
         }
     }, [meta]);
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-        }).format(amount);
-    };
 
     const deleteTransaction = (transactionId: string) => {
         if (confirm("Are you sure you want to delete this transaction?")) {
@@ -135,12 +128,10 @@ const History = () => {
             <TotalExpenses
                 total={total}
                 numTransactions={transactions.length}
-                formatCurrency={formatCurrency}
             />
             <TransactionList
                 selectedDate={filters.month}
                 filteredTransactions={transactionsWithUI}
-                formatCurrency={formatCurrency}
                 deleteTransaction={deleteTransaction}
                 loading={loading}
                 loadingDelete={loadingDelete}

@@ -5,6 +5,7 @@ import alertReducer from "../slices/alertSlice";
 import incomeReducer from "../slices/incomeSlice";
 import expenseReducer from "../slices/expenseSlice";
 import historyReducer from "../slices/historySlice";
+import dashboardReducer from "../slices/dashboardSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         income: incomeReducer,
         expense: expenseReducer,
         history: historyReducer,
+        dashboard: dashboardReducer,
         alert: alertReducer,
     },
 });
