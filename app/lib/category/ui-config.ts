@@ -13,6 +13,7 @@ export const categoryUIConfig: Record<CategoryType, CategoryUIConfig> = {
         iconColor: "text-red-600",
         textColor: "text-red-800",
         color: "red",
+        progressBgColor: "bg-red-400",
     },
     optional: {
         icon: ShoppingCartIcon,
@@ -22,6 +23,7 @@ export const categoryUIConfig: Record<CategoryType, CategoryUIConfig> = {
         iconColor: "text-blue-600",
         textColor: "text-blue-800",
         color: "blue",
+        progressBgColor: "bg-blue-400",
     },
     culture: {
         icon: BookOpenIcon,
@@ -31,6 +33,7 @@ export const categoryUIConfig: Record<CategoryType, CategoryUIConfig> = {
         iconColor: "text-green-600",
         textColor: "text-green-800",
         color: "green",
+        progressBgColor: "bg-green-400",
     },
     unexpected: {
         icon: ExclamationCircleIcon,
@@ -40,5 +43,6 @@ export const categoryUIConfig: Record<CategoryType, CategoryUIConfig> = {
         iconColor: "text-yellow-600",
         textColor: "text-yellow-800",
         color: "yellow",
+        progressBgColor: "bg-yellow-400",
     },
 };

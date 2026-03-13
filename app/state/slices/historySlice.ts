@@ -1,4 +1,4 @@
-import api from "@/app/api/api";
+import api from "../../api/api";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { hideAlert, showAlert } from "./alertSlice";
@@ -66,7 +66,7 @@ export const getCategoriesAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message: "Network error. Please check your connection",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -111,7 +111,7 @@ export const getExpensesAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message: "Network error. Please check your connection",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -144,14 +144,14 @@ export const deleteExpenseAsync = createAsyncThunk<
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
-                }
+                },
             );
 
             dispatch(
                 showAlert({
                     type: "success",
                     message: "Expense deleted successfully",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -165,7 +165,7 @@ export const deleteExpenseAsync = createAsyncThunk<
                     showAlert({
                         type: "error",
                         message: "Network error. Please check your connection",
-                    })
+                    }),
                 );
 
                 setTimeout(() => {
@@ -184,7 +184,7 @@ export const deleteExpenseAsync = createAsyncThunk<
                     message:
                         error.response?.data?.message ??
                         "Failed to delete expense",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -197,7 +197,7 @@ export const deleteExpenseAsync = createAsyncThunk<
                     error.response?.data?.message ?? "Failed to delete expense",
             });
         }
-    }
+    },
 );
 
 const expenseSlice = createSlice({
@@ -257,7 +257,7 @@ const expenseSlice = createSlice({
             .addCase(deleteExpenseAsync.fulfilled, (state, action) => {
                 state.loadingDelete = false;
                 state.transactions = state.transactions.filter(
-                    (transaction) => transaction._id !== action.payload
+                    (transaction) => transaction._id !== action.payload,
                 );
             })
             .addCase(deleteExpenseAsync.rejected, (state, action) => {

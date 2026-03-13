@@ -2,7 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { formatCurrency } from "@/app/lib/utils";
 
-const SavingsProgress = () => {
+const SavingsProgress = ({
+    savingsGoal,
+    actualSavings,
+}: {
+    savingsGoal: number;
+    actualSavings: number;
+}) => {
+    const savingsProgress =
+        savingsGoal > 0 ? (actualSavings / savingsGoal) * 100 : 0;
     return (
         <>
             <Card className="border-orange-200 bg-white/80 backdrop-blur">
@@ -15,14 +23,10 @@ const SavingsProgress = () => {
                     <div className="space-y-2">
                         <div className="flex items-center justify-between text-orange-800">
                             <span>Progress to Goal</span>
-                            <span>
-                                {/*savingsProgress.toFixed(1)*/ (10).toFixed(1)}
-                                %
-                            </span>
+                            <span>{savingsProgress.toFixed(1)}%</span>
                         </div>
                         <Progress
-                            // value={Math.min(savingsProgress, 100)} // temporary comment
-                            value={Math.min(10, 100)}
+                            value={Math.min(savingsProgress, 100)}
                             className="h-3"
                         />
                     </div>
@@ -30,12 +34,7 @@ const SavingsProgress = () => {
                         <span>Remaining to save</span>
                         <span>
                             {formatCurrency(
-                                Math.max(
-                                    0,
-                                    // monthlyData.savingsGoal -
-                                    //     totals.actualSavings,
-                                    1500 - 1000,
-                                ),
+                                Math.max(0, savingsGoal - actualSavings),
                             )}
                         </span>
                     </div>

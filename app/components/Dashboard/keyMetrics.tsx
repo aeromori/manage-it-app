@@ -7,7 +7,17 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { formatCurrency } from "../../lib/utils";
 
-const KeyMetrics = () => {
+const KeyMetrics = ({
+    monthlyIncome,
+    savingsGoal,
+    totalExpenses,
+    actualSavings,
+}: {
+    monthlyIncome: number;
+    savingsGoal: number;
+    totalExpenses: number;
+    actualSavings: number;
+}) => {
     return (
         <>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -20,7 +30,7 @@ const KeyMetrics = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="text-green-700">
-                            {formatCurrency(5000)}
+                            {formatCurrency(monthlyIncome)}
                         </div>
                     </CardContent>
                 </Card>
@@ -34,8 +44,7 @@ const KeyMetrics = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="text-red-700">
-                            {formatCurrency(3200)}
-                            {/* {formatCurrency(totals.totalExpenses)} */}
+                            {formatCurrency(totalExpenses)}
                         </div>
                     </CardContent>
                 </Card>
@@ -49,8 +58,7 @@ const KeyMetrics = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="text-blue-700">
-                            {formatCurrency(1500)}
-                            {/* {formatCurrency(monthlyData.savingsGoal)} */}
+                            {formatCurrency(savingsGoal)}
                         </div>
                     </CardContent>
                 </Card>
@@ -65,13 +73,12 @@ const KeyMetrics = () => {
                     <CardContent>
                         <div
                             className={
-                                1000 >= 0 // totals.actualSavings >= 0
+                                actualSavings >= 0
                                     ? "text-purple-700"
                                     : "text-red-700"
                             }
                         >
-                            {formatCurrency(1000)}
-                            {/* {formatCurrency(totals.actualSavings)} */}
+                            {formatCurrency(actualSavings)}
                         </div>
                     </CardContent>
                 </Card>

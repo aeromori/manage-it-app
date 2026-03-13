@@ -1,7 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { formatCurrency } from "../../lib/utils";
+import { CategoryWithUI } from "../../types/expenses";
 
-const CategoriesBreakdown = () => {
+type TotalExpenseByCategory = {
+    [key: string]: number;
+};
+
+type CategoriesBreakdownProps = {
+    expenseCategories: CategoryWithUI[] | [];
+    totalExpenses: number;
+    totalExpenseByCategory: TotalExpenseByCategory;
+};
+
+const CategoriesBreakdown = ({
+    expenseCategories,
+    totalExpenses,
+    totalExpenseByCategory,
+}: CategoriesBreakdownProps) => {
     return (
         <>
             <Card className="border-orange-200 bg-white/80 backdrop-blur">
@@ -12,52 +27,20 @@ const CategoriesBreakdown = () => {
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        {[
-                            {
-                                name: "Survival (Needs)",
-                                key: "survival" as const,
-                                color: "bg-red-500",
-                                description:
-                                    "Food, housing, utilities, transport",
-                            },
-                            {
-                                name: "Optional (Wants)",
-                                key: "optional" as const,
-                                color: "bg-blue-500",
-                                description:
-                                    "Dining out, shopping, subscriptions",
-                            },
-                            {
-                                name: "Culture",
-                                key: "culture" as const,
-                                color: "bg-green-500",
-                                description:
-                                    "Books, events, hobbies, self-improvement",
-                            },
-                            {
-                                name: "Unexpected",
-                                key: "unexpected" as const,
-                                color: "bg-yellow-500",
-                                description: "Emergency expenses, repairs",
-                            },
-                        ].map((category) => {
-                            // const amount =
-                            //     totals.expensesByCategory[category.key];
-                            // const percentage =
-                            //     totals.totalExpenses > 0
-                            //         ? (amount / totals.totalExpenses) * 100
-                            //         : 0;
-
-                            const amount = 100;
+                        {expenseCategories.map((category) => {
+                            const amount =
+                                totalExpenseByCategory[category.category];
                             const percentage =
-                                500 > 0 ? (amount / 500) * 100 : 0;
+                                totalExpenses > 0
+                                    ? (amount / totalExpenses) * 100
+                                    : 0;
 
                             return (
-                                <div key={category.key} className="space-y-2">
+                                <div key={category._id} className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <div className="text-orange-900">
-                                                {category.name}
+                                                {category.category}
                                             </div>
                                             <div className="text-orange-600">
                                                 {category.description}
@@ -74,7 +57,7 @@ const CategoriesBreakdown = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div
-                                            className={`h-2 rounded-full ${category.color}`}
+                                            className={`h-2 rounded-full ${category.progressBgColor}`}
                                             style={{
                                                 width: `${percentage}%`,
                                                 minWidth:

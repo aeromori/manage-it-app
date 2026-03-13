@@ -15,3 +15,26 @@ export const formatCurrency = (amount: number) => {
         currency: "USD",
     }).format(amount);
 };
+
+export const calculateTotals = (
+    transactions: any[],
+    expenseCategories: any[],
+) => {
+    const totals: Record<string, number> = {};
+
+    // initialize totals
+    expenseCategories.forEach((cat) => {
+        totals[cat.category] = 0;
+    });
+
+    // sum expenses
+    transactions.forEach((t) => {
+        const categoryName = t.category_id?.category;
+
+        if (categoryName && totals[categoryName] !== undefined) {
+            totals[categoryName] += t.amount;
+        }
+    });
+
+    return totals;
+};

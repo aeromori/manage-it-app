@@ -16,6 +16,7 @@ export type CategoryUIConfig = {
     border: string;
     iconColor: string;
     color: string;
+    progressBgColor: string;
 };
 
 // Combining backend category data with UI configuration for easier use in components
