@@ -10,7 +10,10 @@ import CategoriesBreakdown from "./categoriesBreakdown";
 
 import { AppDispatch, RootState } from "../../state/store";
 
-import { getDashboardDataAsync } from "../../state/slices/dashboardSlice";
+import {
+    getDashboardDataAsync,
+    resetState,
+} from "../../state/slices/dashboardSlice";
 import { calculateTotals, normalizeCategory } from "../../lib/utils";
 import { CategoryWithUI } from "../../types/expenses";
 import { categoryUIConfig } from "../../lib/category/ui-config";
@@ -56,6 +59,10 @@ const Dashboard = () => {
 
     useEffect(() => {
         dispatch(getDashboardDataAsync({ date: dayjs().toISOString() }));
+
+        return () => {
+            dispatch(resetState());
+        };
     }, []);
 
     return (
