@@ -99,8 +99,8 @@ const dashboardSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state = initialState;
+        resetState(): dashboardState {
+            return { ...initialState };
         },
         resetMeta(state) {
             state.meta = null;

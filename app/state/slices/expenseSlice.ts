@@ -64,7 +64,7 @@ export const getCategoriesAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message: "Network error. Please check your connection",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -104,14 +104,14 @@ export const saveExpenseAsync = createAsyncThunk<
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
-                }
+                },
             );
 
             dispatch(
                 showAlert({
                     type: "success",
                     message: "Expense saved successfully",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -125,7 +125,7 @@ export const saveExpenseAsync = createAsyncThunk<
                     showAlert({
                         type: "error",
                         message: "Network error. Please check your connection",
-                    })
+                    }),
                 );
 
                 setTimeout(() => {
@@ -144,7 +144,7 @@ export const saveExpenseAsync = createAsyncThunk<
                     message:
                         error.response?.data?.message ||
                         "Failed to save expense",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -152,10 +152,10 @@ export const saveExpenseAsync = createAsyncThunk<
             }, 3000);
 
             return rejectWithValue(
-                error.response?.data?.message || "Failed to save expense"
+                error.response?.data?.message || "Failed to save expense",
             );
         }
-    }
+    },
 );
 
 const expenseSlice = createSlice({
@@ -165,12 +165,8 @@ const expenseSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state = initialState;
-            // state.loading = false;
-            // state.loadingSubmit = false;
-            // state.expense = null;
-            // state.meta = null;
+        resetState(): expenseState {
+            return { ...initialState };
         },
         resetMeta(state) {
             state.meta = null;

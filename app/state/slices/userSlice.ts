@@ -42,11 +42,8 @@ const userSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state = initialState;
-            // state.loading = false;
-            // state.users = [];
-            // state.meta = null;
+        resetState(): usersState {
+            return { ...initialState };
         },
     },
     extraReducers: (builder) => {
@@ -114,7 +111,7 @@ export const fetchUsersAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message: "Network error. Please check your connection",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -132,7 +129,7 @@ export const fetchUsersAsync = createAsyncThunk<
                 type: "error",
                 message:
                     error.response?.data?.message ?? "Failed to fetch users",
-            })
+            }),
         );
 
         setTimeout(() => {
@@ -170,7 +167,7 @@ export const fetchUserDetailAsync = createAsyncThunk<
                     showAlert({
                         type: "error",
                         message: "Network error. Please check your connection",
-                    })
+                    }),
                 );
 
                 setTimeout(() => {
@@ -185,7 +182,7 @@ export const fetchUserDetailAsync = createAsyncThunk<
                     "Failed to fetch user detail",
             });
         }
-    }
+    },
 );
 
 export const { setLoading, resetState } = userSlice.actions;

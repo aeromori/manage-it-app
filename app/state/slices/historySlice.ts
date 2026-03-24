@@ -207,8 +207,8 @@ const expenseSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state = initialState;
+        resetState(): expenseState {
+            return { ...initialState };
         },
         resetMeta(state) {
             state.meta = null;

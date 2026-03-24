@@ -29,10 +29,8 @@ const authSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state.loading = false;
-            state.user = null;
-            state.error = null;
+        resetState(): authState {
+            return { ...initialState };
         },
     },
     extraReducers: (builder) => {
@@ -62,7 +60,7 @@ export const loginAsync = createAsyncThunk<
     "authentication/loginAsync",
     async (
         credentials: { username: string; password: string },
-        { rejectWithValue }
+        { rejectWithValue },
     ) => {
         const { username, password } = credentials;
 
@@ -75,10 +73,10 @@ export const loginAsync = createAsyncThunk<
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
-                error.response?.data?.message || "Login failed"
+                error.response?.data?.message || "Login failed",
             );
         }
-    }
+    },
 );
 
 export const { setLoading, resetState } = authSlice.actions;

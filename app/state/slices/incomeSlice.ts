@@ -59,7 +59,7 @@ export const fetchIncomeAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message: "Network error. Please check your connection",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -98,14 +98,14 @@ export const saveIncomeAsync = createAsyncThunk<
                     headers: {
                         authorization: `Bearer ${token}`,
                     },
-                }
+                },
             );
 
             dispatch(
                 showAlert({
                     type: "success",
                     message: "Income data saved successfully",
-                })
+                }),
             );
 
             setTimeout(() => {
@@ -119,7 +119,7 @@ export const saveIncomeAsync = createAsyncThunk<
                     showAlert({
                         type: "error",
                         message: "Network error. Please check your connection",
-                    })
+                    }),
                 );
 
                 setTimeout(() => {
@@ -133,10 +133,10 @@ export const saveIncomeAsync = createAsyncThunk<
             }
 
             return rejectWithValue(
-                error.response?.data?.message || "Failed to save income data"
+                error.response?.data?.message || "Failed to save income data",
             );
         }
-    }
+    },
 );
 
 const incomeSlice = createSlice({
@@ -146,11 +146,8 @@ const incomeSlice = createSlice({
         setLoading(state, action: PayloadAction<boolean>) {
             state.loading = action.payload;
         },
-        resetState(state) {
-            state = initialState;
-            // state.loading = false;
-            // state.income = null;
-            // state.meta = null;
+        resetState(): incomeState {
+            return { ...initialState };
         },
     },
     extraReducers: (builder) => {
