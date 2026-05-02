@@ -104,7 +104,7 @@ export const fetchUsersAsync = createAsyncThunk<
             },
         });
 
-        return response.data;
+        return response.body;
     } catch (error: any) {
         if (!error.response) {
             dispatch(
@@ -128,7 +128,7 @@ export const fetchUsersAsync = createAsyncThunk<
             showAlert({
                 type: "error",
                 message:
-                    error.response?.data?.message ?? "Failed to fetch users",
+                    error.response?.body?.message ?? "Failed to fetch users",
             }),
         );
 
@@ -138,7 +138,7 @@ export const fetchUsersAsync = createAsyncThunk<
 
         return rejectWithValue({
             code: error.response?.status ?? 500,
-            message: error.response?.data?.message ?? "Failed to fetch users",
+            message: error.response?.body?.message ?? "Failed to fetch users",
         });
     }
 });
@@ -160,7 +160,7 @@ export const fetchUserDetailAsync = createAsyncThunk<
                 },
             });
 
-            return response.data;
+            return response.body;
         } catch (error: any) {
             if (!error.response) {
                 dispatch(
@@ -178,7 +178,7 @@ export const fetchUserDetailAsync = createAsyncThunk<
             return rejectWithValue({
                 code: error.response?.status ?? 500,
                 message:
-                    error.response?.data?.message ??
+                    error.response?.body?.message ??
                     "Failed to fetch user detail",
             });
         }
