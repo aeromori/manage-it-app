@@ -50,7 +50,7 @@ const initialState: dashboardState = {
     meta: null,
 };
 
-const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
 export const getDashboardDataAsync = createAsyncThunk<
     any,
@@ -72,7 +72,7 @@ export const getDashboardDataAsync = createAsyncThunk<
                 },
             });
 
-            return response.data;
+            return response.body;
         } catch (error: any) {
             if (!error.response) {
                 dispatch(

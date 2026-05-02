@@ -70,10 +70,11 @@ export const loginAsync = createAsyncThunk<
                 password,
             });
 
-            return response.data;
+            return response.body;
         } catch (error: any) {
+            console.log({error})
             return rejectWithValue(
-                error.response?.data?.message || "Login failed",
+                error.response?.body?.message || "Login failed",
             );
         }
     },
