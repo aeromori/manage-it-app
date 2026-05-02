@@ -59,7 +59,7 @@ export const getCategoriesAsync = createAsyncThunk<
             },
         });
 
-        return response.data;
+        return response.body;
     } catch (error: any) {
         if (!error.response) {
             dispatch(
@@ -77,7 +77,7 @@ export const getCategoriesAsync = createAsyncThunk<
         return rejectWithValue({
             code: error.response?.status ?? 500,
             message:
-                error.response?.data?.message ??
+                error.response?.body?.message ??
                 "Failed to fetch expense categories",
         });
     }
@@ -104,7 +104,7 @@ export const getExpensesAsync = createAsyncThunk<
             },
         });
 
-        return response.data;
+        return response.body;
     } catch (error: any) {
         if (!error.response) {
             dispatch(
@@ -122,7 +122,7 @@ export const getExpensesAsync = createAsyncThunk<
         return rejectWithValue({
             code: error.response?.status ?? 500,
             message:
-                error.response?.data?.message ?? "Failed to fetch expenses",
+                error.response?.body?.message ?? "Failed to fetch expenses",
         });
     }
 });
@@ -182,7 +182,7 @@ export const deleteExpenseAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message:
-                        error.response?.data?.message ??
+                        error.response?.body?.message ??
                         "Failed to delete expense",
                 }),
             );
@@ -194,7 +194,7 @@ export const deleteExpenseAsync = createAsyncThunk<
             return rejectWithValue({
                 code: error.response?.status ?? 500,
                 message:
-                    error.response?.data?.message ?? "Failed to delete expense",
+                    error.response?.body?.message ?? "Failed to delete expense",
             });
         }
     },

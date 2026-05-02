@@ -57,7 +57,7 @@ export const getCategoriesAsync = createAsyncThunk<
             },
         });
 
-        return response.data;
+        return response.body;
     } catch (error: any) {
         if (!error.response) {
             dispatch(
@@ -75,7 +75,7 @@ export const getCategoriesAsync = createAsyncThunk<
         return rejectWithValue({
             code: error.response?.status ?? 500,
             message:
-                error.response?.data?.message ??
+                error.response?.body?.message ??
                 "Failed to fetch expense categories",
         });
     }
@@ -118,7 +118,7 @@ export const saveExpenseAsync = createAsyncThunk<
                 dispatch(hideAlert());
             }, 3000);
 
-            return response.data;
+            return response.body;
         } catch (error: any) {
             if (!error.response) {
                 dispatch(
@@ -142,7 +142,7 @@ export const saveExpenseAsync = createAsyncThunk<
                 showAlert({
                     type: "error",
                     message:
-                        error.response?.data?.message ||
+                        error.response?.body?.message ||
                         "Failed to save expense",
                 }),
             );
@@ -152,7 +152,7 @@ export const saveExpenseAsync = createAsyncThunk<
             }, 3000);
 
             return rejectWithValue(
-                error.response?.data?.message || "Failed to save expense",
+                error.response?.body?.message || "Failed to save expense",
             );
         }
     },

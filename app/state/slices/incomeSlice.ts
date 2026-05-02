@@ -52,7 +52,7 @@ export const fetchIncomeAsync = createAsyncThunk<
             },
         });
 
-        return response.data;
+        return response.body;
     } catch (error: any) {
         if (!error.response) {
             dispatch(
@@ -70,7 +70,7 @@ export const fetchIncomeAsync = createAsyncThunk<
         return rejectWithValue({
             code: error.response?.status ?? 500,
             message:
-                error.response?.data?.message ??
+                error.response?.body?.message ??
                 "Failed to fetch income details",
         });
     }
@@ -112,7 +112,7 @@ export const saveIncomeAsync = createAsyncThunk<
                 dispatch(hideAlert());
             }, 3000);
 
-            return response.data;
+            return response.body;
         } catch (error: any) {
             if (!error.response) {
                 dispatch(
@@ -133,7 +133,7 @@ export const saveIncomeAsync = createAsyncThunk<
             }
 
             return rejectWithValue(
-                error.response?.data?.message || "Failed to save income data",
+                error.response?.body?.message || "Failed to save income data",
             );
         }
     },
